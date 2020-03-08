@@ -1,0 +1,125 @@
+import "Srl/Console.alusus";
+import "Srl/Array.alusus";
+import "Srl/String.alusus";
+import "Srl/Memory.alusus";
+import "libsqlite3.so.0";
+/*
+    Linux .so | .so.0
+    Mac OS .dylib
+    Windows .lib
+*/
+
+type ColumnMap {
+    use Srl;
+    def keys: Array[ptr[array[Char]]];
+    def values: Array[ptr[array[Char]]];
+
+    handler this~init() {}
+    handler this~init(columnMap: ref[ColumnMap]) {
+        this.keys = columnMap.keys;
+        this.values = columnMap.values;
+    }
+
+    handler this~terminate() {
+        this.keys~terminate();
+        this.values~terminate();
+    }
+
+    handler this(key: ptr[array[Char]]): ptr[array[Char]] {
+        def arrInd: int = 0;
+        for , arrInd<this.keys.getLength(), arrInd++
+            if String.isEqual(this.keys(arrInd), key)
+                return this.values(arrInd)
+        return 0;
+    }
+
+    func set(key: ptr[array[Char]], value: ptr[array[Char]]): ColumnMap {
+        this.keys.add(key);
+        this.values.add(value);
+        return this;
+    }
+
+    func remove(key: ptr[array[Char]]): Bool {
+        def arrInd: int = 0;
+        for , arrInd<this.keys.getLength(), arrInd++
+            if this.keys(arrInd) == key
+               return this.remove(arrInd)
+        return false;
+    }
+
+    func remove(index: Int): Bool {
+        this.keys.remove(index);
+        this.values.remove(index);
+        return true;
+    }
+
+    func clear(): Bool {
+        this.keys.clear();
+        this.values.clear();
+        return true;
+    }
+
+    func getLength(): Int {
+        return this.keys.getLength();
+    }
+}
+
+type SQLite3 {
+    use Srl;
+    def _db: ptr[SQLite3];
+
+    handler this~init(filename: ptr[array[Char]]) {
+        _open(filename, this._db~ptr);
+    }
+
+    handler this~terminate() {
+        _close(this._db);
+    }
+
+    func exec(sql: ptr[array[Char]]): Array[ColumnMap] {
+        def errmsg: ptr[array[Char]];
+        @shared
+        def columnMapArray: Array[ColumnMap];
+        _exec(this._db, sql, _CustomizedCallback~ptr, columnMapArray~ptr, errmsg~ptr);
+
+        return columnMapArray;
+    };
+
+    func exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap] {
+        @shared
+        def columnMapArray: Array[ColumnMap];
+        _exec(this._db, sql, _CustomizedCallback~ptr, columnMapArray~ptr, errmsg~ptr);
+        return columnMap~cnt;
+    }
+
+    handler this = ptr[array[Char]] {
+        this~init(value);
+    }
+
+    @shared
+    func _CustomizedCallback(data: ptr, argc: Int, argv: ptr[array[ptr[array[Char]]]], azColName: ptr[array[ptr[array[Char]]]]): Int {
+        def i: Int = 0;
+        def columnMap: ColumnMap;
+        for , i < argc, i++ {
+            columnMap.set(azColName~cnt(i), argv~cnt(i));
+        }
+        data~cast[ptr[Array[ColumnMap]]]~cnt.add(columnMap);
+        return 0;
+    }
+
+    @shared
+    @expname[sqlite3_open]
+    func _open(filename: ptr[array[Char]], ppDb: ptr[ptr[SQLite3]]): Int;
+
+    @shared
+    @expname[sqlite3_exec]
+    func _exec(sqlite: ptr[SQLite3], sql: ptr[array[Char]], 
+            cb: ptr[func(data: ptr, argc: Int, argv: ptr[array[ptr[array[Char]]]], azColName: ptr[array[ptr[array[Char]]]]): Int],
+            data: ptr, errmsg: ptr[ptr[array[Char]]]): Int;
+    
+    @shared
+    @expname[sqlite3_close]
+    func _close(sqlite: ptr[SQLite3]): Int;
+    @expname[sqlite3_libversion]
+    func _version(): ptr[array[Char]];
+};

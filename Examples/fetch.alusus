@@ -1,0 +1,29 @@
+import "../Sqlite.alusus";
+
+func main {
+    use Srl;
+    def sqlite: SQLite3 = "mydb.db";
+
+    Console.print("SQLite Version: %s\n", sqlite._version());
+    sqlite.exec("CREATE table teachers(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, section INT)");
+
+    sqlite.exec("INSERT INTO teachers VALUES(NULL, 'Mohammed', 1);");
+
+    def cm: Array[ColumnMap] = sqlite.exec("SELECT * FROM teachers;");
+    Console.print("%sROW 0 COLUMN 'NAME': %s\n", Console.Style.BRIGHT, cm(0)("name"))
+
+    def keysInd: int = 0;
+    for , keysInd < cm(0).keys.getLength(), keysInd++ {
+        Console.print("%s %s\t|", Console.Style.BRIGHT, cm(0).keys(keysInd))
+    };
+    Console.print("%s\n", Console.Style.RESET);
+
+    def rowInd: int = 0;
+    for , rowInd<cm.getLength(), rowInd++ {
+        def colInd: int = 0;
+        for , colInd<cm(rowInd).values.getLength(), colInd++ {
+            Console.print(" %s\t|", cm(rowInd).values(colInd))
+        };
+        Console.print("\n");
+    };
+} main()
