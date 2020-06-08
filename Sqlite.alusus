@@ -11,8 +11,8 @@ import "libsqlite3.so.0";
 
 type ColumnMap {
     use Srl;
-    def keys: Array[ptr[array[Char]]];
-    def values: Array[ptr[array[Char]]];
+    def keys: Array[String];
+    def values: Array[String];
 
     handler this~init() {}
     handler this~init(columnMap: ref[ColumnMap]) {
@@ -25,17 +25,20 @@ type ColumnMap {
         this.values~terminate();
     }
 
-    handler this(key: ptr[array[Char]]): ptr[array[Char]] {
+    handler this(key: ptr[array[Char]]): String {
+        @shared def dummy: String;
         def arrInd: int = 0;
         for , arrInd<this.keys.getLength(), arrInd++
-            if String.isEqual(this.keys(arrInd), key)
+            if this.keys(arrInd) == key
                 return this.values(arrInd)
-        return 0;
+        return dummy;
     }
 
     func set(key: ptr[array[Char]], value: ptr[array[Char]]): ColumnMap {
-        this.keys.add(key);
-        this.values.add(value);
+        def kstr: String = key;
+        def vstr: String = value;
+        this.keys.add(kstr);
+        this.values.add(vstr);
         return this;
     }
 
