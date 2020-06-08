@@ -10,11 +10,11 @@ func main {
     sqlite.exec("INSERT INTO teachers VALUES(NULL, 'Mohammed', 1);");
 
     def cm: Array[ColumnMap] = sqlite.exec("SELECT * FROM teachers;");
-    Console.print("%sROW 0 COLUMN 'NAME': %s\n", Console.Style.BRIGHT, cm(0)("name"))
+    Console.print("%sROW 0 COLUMN 'NAME': %s\n", Console.Style.BRIGHT, cm(0)("name").buf)
 
     def keysInd: int = 0;
     for , keysInd < cm(0).keys.getLength(), keysInd++ {
-        Console.print("%s %s\t|", Console.Style.BRIGHT, cm(0).keys(keysInd))
+        Console.print("%s %s\t|", Console.Style.BRIGHT, cm(0).keys(keysInd).buf)
     };
     Console.print("%s\n", Console.Style.RESET);
 
@@ -22,7 +22,7 @@ func main {
     for , rowInd<cm.getLength(), rowInd++ {
         def colInd: int = 0;
         for , colInd<cm(rowInd).values.getLength(), colInd++ {
-            Console.print(" %s\t|", cm(rowInd).values(colInd))
+            Console.print(" %s\t|", cm(rowInd).values(colInd).buf)
         };
         Console.print("\n");
     };
