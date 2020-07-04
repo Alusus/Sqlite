@@ -81,7 +81,6 @@ type SQLite3 {
 
     func exec(sql: ptr[array[Char]]): Array[ColumnMap] {
         def errmsg: ptr[array[Char]];
-        @shared
         def columnMapArray: Array[ColumnMap];
         _exec(this._db, sql, _CustomizedCallback~ptr, columnMapArray~ptr, errmsg~ptr);
 
@@ -89,7 +88,6 @@ type SQLite3 {
     };
 
     func exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap] {
-        @shared
         def columnMapArray: Array[ColumnMap];
         _exec(this._db, sql, _CustomizedCallback~ptr, columnMapArray~ptr, errmsg~ptr);
         return columnMap~cnt;
