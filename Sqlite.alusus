@@ -71,6 +71,9 @@ type SQLite3 {
     use Srl;
     def _db: ptr[SQLite3];
 
+    handler this~init() {
+    }
+
     handler this~init(filename: ptr[array[Char]]) {
         _open(filename, this._db~ptr);
     }
