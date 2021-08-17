@@ -1,15 +1,17 @@
-import "../Sqlite.alusus";
+import "Srl/Console";
+import "Apm";
+Apm.importFile("Alusus/Sqlite");
 
 func main {
     use Srl;
-    def sqlite: SQLite3 = "mydb.db";
+    def sqlite: Sqlite.Db = "mydb.db";
 
-    Console.print("SQLite Version: %s\n", sqlite._version());
+    Console.print("SQLite Version: %s\n", Sqlite.version());
     sqlite.exec("CREATE table teachers(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, section INT)");
 
     sqlite.exec("INSERT INTO teachers VALUES(NULL, 'Mohammed', 1);");
 
-    def cm: Array[ColumnMap] = sqlite.exec("SELECT * FROM teachers;");
+    def cm: Array[Sqlite.Record] = sqlite.exec("SELECT * FROM teachers;");
     Console.print("%sROW 0 COLUMN 'NAME': %s\n", Console.Style.BRIGHT, cm(0)("name").buf)
 
     def keysInd: int = 0;
@@ -26,4 +28,6 @@ func main {
         };
         Console.print("\n");
     };
-} main()
+}
+main();
+
