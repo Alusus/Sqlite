@@ -10,7 +10,7 @@ import "libsqlite3.so.0";
 */
 
 module Sqlite {
-    type Record {
+    class Record {
         use Srl;
         def keys: Array[String];
         def values: Array[String];
@@ -35,7 +35,7 @@ module Sqlite {
             return dummy;
         }
 
-        func set(key: CharsPtr, value: CharsPtr): Record {
+        handler this.set(key: CharsPtr, value: CharsPtr): Record {
             def kstr: String = key;
             def vstr: String = value;
             this.keys.add(kstr);
@@ -43,7 +43,7 @@ module Sqlite {
             return this;
         }
 
-        func remove(key: CharsPtr): Bool {
+        handler this.remove(key: CharsPtr): Bool {
             def arrInd: int = 0;
             for , arrInd<this.keys.getLength(), arrInd++
                 if this.keys(arrInd) == key
@@ -51,27 +51,27 @@ module Sqlite {
             return false;
         }
 
-        func remove(index: Int): Bool {
+        handler this.remove(index: Int): Bool {
             this.keys.remove(index);
             this.values.remove(index);
             return true;
         }
 
-        func clear(): Bool {
+        handler this.clear(): Bool {
             this.keys.clear();
             this.values.clear();
             return true;
         }
 
-        func getLength(): Int {
+        handler this.getLength(): Int {
             return this.keys.getLength();
         }
     }
 
-    type _Db {}
+    class _Db {}
     def DbHandle: alias ptr[_Db];
 
-    type Db {
+    class Db {
         use Srl;
         def db: DbHandle = 0;
 
@@ -86,16 +86,16 @@ module Sqlite {
             if this.db != 0 close(this.db);
         }
 
-        func exec(sql: CharsPtr): Array[Record] {
+        handler this.exec(sql: CharsPtr): Array[Record] {
             def errmsg: CharsPtr;
             def recordArray: Array[Record];
-            exec(this.db, sql, _customizedCallback~ptr, recordArray~ptr, errmsg);
+            Sqlite.exec(this.db, sql, _customizedCallback~ptr, recordArray~ptr, errmsg);
             return recordArray;
-        };
+        }
 
-        func exec(sql: CharsPtr, errmsg: ref[CharsPtr]): Array[Record] {
+        handler this.exec(sql: CharsPtr, errmsg: ref[CharsPtr]): Array[Record] {
             def recordArray: Array[Record];
-            exec(this.db, sql, _customizedCallback~ptr, recordArray~ptr, errmsg);
+            Sqlite.exec(this.db, sql, _customizedCallback~ptr, recordArray~ptr, errmsg);
             return recordArray;
         }
 
@@ -104,7 +104,6 @@ module Sqlite {
             open(value, this.db);
         }
 
-        @shared
         func _customizedCallback(
             data: ptr, argc: Int, argv: ptr[array[CharsPtr]], azColName: ptr[array[CharsPtr]]
         ): Int {
