@@ -1,6 +1,6 @@
 import "Srl/Console";
 import "Apm";
-Apm.importFile("Alusus/Sqlite");
+Apm.importPackage("Alusus/Sqlite@0.0");
 
 func main {
     use Srl;
