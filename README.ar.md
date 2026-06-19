@@ -1,40 +1,66 @@
-# SQLite Library for ALUSUS
-[[عربي]](README.ar.md)
+# مكتبة SQLite للغة الأسس
+[[English]](README.md)
 
-## installation
+<div dir=rtl>
 
-You should install sqlite3 first then you can use Library. <br/>
-on Debian (and _Ubuntu_) distro
+## التثبيت
+
+يجب تثبيت sqlite3 أولاً ثم يمكنك استخدام المكتبة. <br/>
+على توزيعة Debian (و _Ubuntu_)
+
+<div dir=ltr>
 
 ```
 apt install libsqlite3-0
 ```
 
-import library
+</div>
+
+استيراد المكتبة
+
+<div dir=ltr>
 
 ```
 import "Apm.alusus";
 Apm.importFile("Alusus/Sqlite");
 ```
 
-## Methods
+</div>
+
+## الدوال
+
+<div dir=ltr>
 
 - Sqlite.exec(sql: ptr[array[Char]]): Array[ColumnMap];
 - Sqlite.exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap];
 
-## Operators
+</div>
+
+
+## العمليات
+
+<div dir=ltr>
 
 ```
 this = ptr[array[Char]]
 ```
 
-init Sqlite with "db" filename:
+</div>
+
+تهيئة Sqlite باسم ملف "db":
+
+<div dir=ltr>
 
 ```
 def mydb: Sqlite = "mydb.db";
 ```
 
-## Example
+</div>
+
+
+## مثال
+
+<div dir=ltr>
 
 ```
 def sqlite: SQLite3 = "mydb.db";
@@ -47,9 +73,13 @@ def cm: Array[ColumnMap] = sqlite.exec("SELECT * FROM teachers;");
 Console.print("ROW 0 COLUMN 'NAME': %s\n", cm(0)("name"))
 ```
 
-you will find more examples in `./Examples`
+</div>
 
-## License
+ستجد المزيد من الأمثلة في `./Examples`
+
+## الرخصة
+
+<div dir=ltr>
 
 ```
 Apache License
@@ -65,4 +95,8 @@ _&lt;<http://www.apache.org/licenses/>&gt;_
 “License” shall mean the terms and conditions for use, reproduction, and
 distribution as defined...
 ```
+
+</div>
+
+</div>
 
