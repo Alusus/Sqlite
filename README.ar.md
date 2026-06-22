@@ -1,7 +1,9 @@
-# مكتبة SQLite للغة الأسس
+# إسـكيولايت (Sqlite)
 [[English]](README.md)
 
 <div dir=rtl>
+
+مكتبة SQLite للغة الأسس
 
 ## التثبيت
 

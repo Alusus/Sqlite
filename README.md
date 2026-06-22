@@ -1,7 +1,9 @@
-# SQLite Library for ALUSUS
+# Sqlite
 [[عربي]](README.ar.md)
 
-## installation
+SQLite Library for ALUSUS
+
+## Installation
 
 You should install sqlite3 first then you can use Library. <br/>
 on Debian (and _Ubuntu_) distro
