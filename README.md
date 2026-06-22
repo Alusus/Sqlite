@@ -19,8 +19,8 @@ Apm.importFile("Alusus/Sqlite");
 
 ## Methods
 
-- Sqlite.exec(sql: ptr[array[Char]]): Array[ColumnMap];
-- Sqlite.exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap];
+* Sqlite.exec(sql: ptr[array[Char]]): Array[ColumnMap];
+* Sqlite.exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap];
 
 ## Operators
 
