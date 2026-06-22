@@ -31,8 +31,10 @@ Apm.importFile("Alusus/Sqlite");
 
 <div dir=ltr>
 
-- Sqlite.exec(sql: ptr[array[Char]]): Array[ColumnMap];
-- Sqlite.exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap];
+```
+Sqlite.exec(sql: ptr[array[Char]]): Array[ColumnMap];
+Sqlite.exec(sql: ptr[array[Char]], errmsg: ptr[array[Char]]): Array[ColumnMap];
+```
 
 </div>
 
